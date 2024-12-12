@@ -1,12 +1,13 @@
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
-
+import torch
 
 class NeuralSearcher:
     def __init__(self, collection_name):
+        device = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
         self.collection_name = collection_name
         # Initialize encoder model
-        self.model = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
+        self.model = SentenceTransformer("all-MiniLM-L6-v2", device=device)
         # initialize Qdrant client
         self.qdrant_client = QdrantClient("http://localhost:6333")
 
